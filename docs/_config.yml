@@ -1,9 +1,9 @@
-github: [metadata]
- encoding: UTF-8
- kramdown:
-   input: GFM
-   hard_wrap: false
- future: true
- jailed: false
- theme: jekyll-theme-minimal
- gfm_quirks: paragraph_end
+title: TKTK Slide Decks
+description: >- # this means to ignore newlines until "baseurl:"
+    Some slide decks related to TKTK
+baseurl: "/tktk" # the subpath of your site, e.g. /blog
+url: "https://upenndigitalscholarship.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+markdown: kramdown
+theme: jekyll-theme-minimal
