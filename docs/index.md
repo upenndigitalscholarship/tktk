@@ -8,4 +8,4 @@ layout: default
 
 # Documentation
 
-* [Student Training Workflow](studentworkflow)
+* [Student Training Workflow](studentworkflow.html)
