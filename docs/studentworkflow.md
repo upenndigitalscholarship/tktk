@@ -10,7 +10,7 @@ layout: default
 - All deliverables must have a timeline
 - Communication expectations for both our team and project owner are detailed
 
-## 2. Making a Semester Plan 
+## 2. Making a Semester Plan
 - Once a single project charter has been completed, generate:
 - List of all technical skills required
 - Student time estimates per skill set
@@ -29,7 +29,10 @@ layout: default
 - Incentivize returners
 
 ## 4. Develop the Skill Sets
-- First two weeks in summer and first 3-4 weeks in the academic year are dedicated to training
+- First two weeks in summer and first 3-4 weeks in the academic year are dedicated to training. We use the following training schedule:
+  - Day 1: [Getting Started](../training_slides/getting_started) - **Note** - This workshop requires preparation ahead of the students arrival, click the link for more information.
+  - Day 2: [Introduction to Command Line](../training_slides/command_line)
+  - Day 3: [Basics of Versioning with Git](../training_slides/git)
 - Students train as a group
 - Training sets up many of the tools they will use on their first project
 - Students are paired or grouped, try to ensure at least one returner or CS student per project to act as mentor
