@@ -30,9 +30,9 @@ layout: default
 
 ## 4. Develop the Skill Sets
 - First two weeks in summer and first 3-4 weeks in the academic year are dedicated to training. We use the following training schedule:
-  - Day 1: [Getting Started](../training_slides/getting_started) - **Note** - This workshop requires preparation ahead of the students arrival, click the link for more information.
-  - Day 2: [Introduction to Command Line](../training_slides/command_line)
-  - Day 3: [Basics of Versioning with Git](../training_slides/git)
+  - Day 1: [Getting Started](https://github.com/upenndigitalscholarship/tktk/tree/master/training_slides/getting_started) - **Note** - This workshop requires preparation ahead of the students arrival, click the link for more information.
+  - Day 2: [Introduction to Command Line](https://github.com/upenndigitalscholarship/tktk/tree/master/training_slides/command_line)
+  - Day 3: [Basics of Versioning with Git](https://github.com/upenndigitalscholarship/tktk/tree/master/training_slides/git)
 - Students train as a group
 - Training sets up many of the tools they will use on their first project
 - Students are paired or grouped, try to ensure at least one returner or CS student per project to act as mentor

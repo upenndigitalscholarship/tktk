@@ -12,6 +12,6 @@ layout: default
 
 # Training Workshops & Materials
 
-* [Getting Started](../training_slides/getting_started)
-* [Introduction to Command Line](../training_slides/command_line)
-* [Basics of Versioning with Git](../training_slides/git)
+* [Getting Started](https://github.com/upenndigitalscholarship/tktk/tree/master/training_slides/getting_started)
+* [Introduction to Command Line](https://github.com/upenndigitalscholarship/tktk/tree/master/training_slides/command_line)
+* [Basics of Versioning with Git](https://github.com/upenndigitalscholarship/tktk/tree/master/training_slides/git)
