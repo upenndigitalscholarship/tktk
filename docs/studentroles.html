@@ -122,7 +122,7 @@ layout: default
             .style("mix-blend-mode", "multiply");
       
         const gradient = link.append("linearGradient")
-            .attr("id", d => (d.uid = DOM.uid("link")).id)
+            //.attr("id", d => (d.uid = DOM.uid("link")).id)
             .attr("gradientUnits", "userSpaceOnUse")
             .attr("x1", d => d.source.x1)
             .attr("x2", d => d.target.x0);
