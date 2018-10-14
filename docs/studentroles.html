@@ -118,11 +118,13 @@ layout: default
       
         const link = svg.append("g")
             .attr("fill", "none")
-            .attr("stroke-opacity", 0.5)
-          .selectAll("g")
+            .attr("stroke", "#000")
+            .attr("stroke-opacity", 0.2)
+          .selectAll("path")
           .data(links)
-          .enter().append("g")
-            .style("mix-blend-mode", "multiply");
+          .enter().append("path")
+            .attr("d", d3.sankeyLinkHorizontal())
+            .attr("stroke-width", function(d) { return d.width; });
      
         // var uidCounter = 0;
         // const gradient = link.append("linearGradient")
@@ -143,10 +145,10 @@ layout: default
         //     .attr("offset", "100%")
         //     .attr("stop-color", d => color(d.target.name));
       
-        link.append("path")
-            .attr("d", d3.sankeyLinkHorizontal())
-            .attr("stroke", d => d.uid)
-            .attr("stroke-width", d => Math.max(1, d.width));
+        // link.append("path")
+        //     .attr("d", d3.sankeyLinkHorizontal())
+        //     .attr("stroke", d => d.uid)
+        //     .attr("stroke-width", d => Math.max(1, d.width));
       
         link.append("title")
             .text(d => `${d.source.name} → ${d.target.name}\n${format(d.value)}`);
