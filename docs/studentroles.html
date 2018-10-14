@@ -123,7 +123,11 @@ layout: default
      
         var uidCounter = 0;
         const gradient = link.append("linearGradient")
-            .attr("id", d => (uidCounter += 1; d.uid = "" + uidCounter))
+            .attr("id", function(d) {
+                uidCounter += 1; 
+                d.uid = "" + uidCounter;
+                return "" + uidCounter;
+            })
             .attr("gradientUnits", "userSpaceOnUse")
             .attr("x1", d => d.source.x1)
             .attr("x2", d => d.target.x0);
