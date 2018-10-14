@@ -1,0 +1,16 @@
+## Sample Interview Questions
+- What is your Program & Year?
+- Why do you want to work with the DS Team?
+- Do you have any previous experience with any of the following:
+  - CSS/HTML
+  - PHP
+  - Javascript
+  - CMS (Wordpress/Omeka/Scalar)
+  - Databases/SQL
+  - Spatial Frameworks (Leaflet/ArcGIS/OpenLayers)
+  - Python
+- (If they are a CS students) It sounds like you have a great deal of programming experience. Why are you interested in working on Humanities and Social Science research projects?
+- (If they have limited CS experience) This position will provide an opportunity to explore a variety of programming languages. Are you interested in taking on the challenge of learning a new language as part of your work?
+- Can you have an example of previous experience working independently and managing your own time and project deadlines?
+- Are you interested in becoming a part of the DS Team (staying with us beyond this semester)?
+- How many hours/wk can you work? What days/times are you available?
