@@ -16,7 +16,7 @@ layout: default
   - Student time estimates per skill set
   - From all charters selected for a semester, generate a list of all needed skills
   - Generate “roles” based on collections of skills that students could be expected to learn in a single semester
-  - For information about how to create these roles, check out our [Position Descriptions][Proposal Worksheet](https://github.com/upenndigitalscholarship/tktk/blob/master/administrative/position_desc.md)
+  - For information about how to create these roles, check out our [Position Descriptions](https://github.com/upenndigitalscholarship/tktk/blob/master/administrative/position_desc.md)
 
 ## 3. Build Your Team!
 - Advertise! Advertise! Advertise!
