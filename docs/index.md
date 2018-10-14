@@ -19,3 +19,6 @@ layout: default
 
 # Administrative
 * [Position Descriptions and Advertising](https://github.com/upenndigitalscholarship/tktk/blob/master/administrative/position_descriptions.md)
+* [Sample First Week Email](https://github.com/upenndigitalscholarship/tktk/blob/master/administrative/first_email.md)
+* [Sample Position Descriptions](https://github.com/upenndigitalscholarship/tktk/blob/master/administrative/position_descriptions.md)
+* [Sample Interview Questions](https://github.com/upenndigitalscholarship/tktk/blob/master/administrative/interview_ques.md)
