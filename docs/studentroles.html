@@ -9,7 +9,7 @@ layout: default
       var width = 964;
       var height = 600;
 
-      var chart = {
+      var chart = (function() {
         const svg = d3.select("#chart")
           .append("svg")
             .attr("width", width)
@@ -74,7 +74,7 @@ layout: default
             .text(d => d.name);
       
         return svg.node();
-      }
+      })();
       
       const flow_yaml = `
         Project 1:
@@ -128,7 +128,7 @@ layout: default
         return {links: flow_links, nodes: flow_nodes};
       };
 
-      var sankey = {
+      var sankey = (function() {
         const sankey = d3.sankey()
             .nodeWidth(15)
             .nodePadding(10)
@@ -137,17 +137,17 @@ layout: default
           nodes: nodes.map(d => Object.assign({}, d)),
           links: links.map(d => Object.assign({}, d))
         });
-      };
+      })();
 
-      var color = {
+      var color = (function() {
         const color = d3.scaleOrdinal(d3.schemeCategory10);
         return name => color(name.replace(/ .*/, ""));
-      };
+      })();
 
-      var format = {
+      var format = (function() {
         const f = d3.format(",.0f");
         return d => `${f(d)} hours`;
-      };
+      })();
     })();
     </script>
 
