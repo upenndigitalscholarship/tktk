@@ -124,24 +124,24 @@ layout: default
           .enter().append("g")
             .style("mix-blend-mode", "multiply");
      
-        var uidCounter = 0;
-        const gradient = link.append("linearGradient")
-            .attr("id", function(d) {
-                uidCounter += 1; 
-                d.uid = "" + uidCounter;
-                return "" + uidCounter;
-            })
-            .attr("gradientUnits", "userSpaceOnUse")
-            .attr("x1", d => d.source.x1)
-            .attr("x2", d => d.target.x0);
+        // var uidCounter = 0;
+        // const gradient = link.append("linearGradient")
+        //     .attr("id", function(d) {
+        //         uidCounter += 1; 
+        //         d.uid = "" + uidCounter;
+        //         return "" + uidCounter;
+        //     })
+        //     .attr("gradientUnits", "userSpaceOnUse")
+        //     .attr("x1", d => d.source.x1)
+        //     .attr("x2", d => d.target.x0);
       
-        gradient.append("stop")
-            .attr("offset", "0%")
-            .attr("stop-color", d => color(d.source.name));
+        // gradient.append("stop")
+        //     .attr("offset", "0%")
+        //     .attr("stop-color", d => color(d.source.name));
       
-        gradient.append("stop")
-            .attr("offset", "100%")
-            .attr("stop-color", d => color(d.target.name));
+        // gradient.append("stop")
+        //     .attr("offset", "100%")
+        //     .attr("stop-color", d => color(d.target.name));
       
         link.append("path")
             .attr("d", d3.sankeyLinkHorizontal())
