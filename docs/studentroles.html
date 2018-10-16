@@ -4,7 +4,8 @@ layout: default
     <div id="chart"></div>
     <textarea id="flow-input" cols="80" rows="40"></textarea>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/3.12.0/js-yaml.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script> -->
+    <script src="lib/3-require.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
     <script src="https://unpkg.com/d3-array"></script>
     <script src="https://unpkg.com/d3-collection"></script>
     <script src="https://unpkg.com/d3-path"></script>
@@ -15,7 +16,7 @@ layout: default
     <script src="https://unpkg.com/d3-scale-chromatic"></script>
     <script src="https://unpkg.com/d3-format"></script>
     <script src="https://unpkg.com/d3-selection"></script>
-    <script src="https://unpkg.com/d3-sankey"></script> 
+    <script src="https://unpkg.com/d3-sankey"></script> -->
     <script>
     (function() {
       var yaml = jsyaml;
@@ -45,12 +46,6 @@ layout: default
           Dev 2: 40
       `;
 
-      d3.select('#flow-input').property('value', flow_yaml);
-
-      var get_flow_yaml = function() {
-        console.log(d3.select('#flow-input').property('value'));
-      };
-
       var flow_graph = function(flow_obj) {
         let flow_links = [];
         let flow_nodes = [];
@@ -79,104 +74,122 @@ layout: default
         return {links: flow_links, nodes: flow_nodes};
       };
 
-      var sankey = (function() {
-        const sankey = d3.sankey()
-            .nodeWidth(15)
-            .nodePadding(10)
-            .extent([[1, 1], [width - 1, height - 5]]);
-        return ({nodes, links}) => sankey({
-          nodes: nodes.map(d => Object.assign({}, d)),
-          links: links.map(d => Object.assign({}, d))
-        });
-      })();
+      d3.require(
+        "d3-array",
+        "d3-collection",
+        "d3-path",
+        "d3-shape",
+        "d3-color",
+        "d3-interpolate",
+        "d3-scale",
+        "d3-scale-chromatic",
+        "d3-format",
+        "d3-selection",
+        "d3-sankey"
+      ).then(function(d3) {
+        d3.select('#flow-input').property('value', flow_yaml);
 
-      var color = (function() {
-        const color = d3.scaleOrdinal(d3.schemeCategory10);
-        return name => color(name.replace(/ .*/, ""));
-      })();
+        var get_flow_yaml = function() {
+          console.log(d3.select('#flow-input').property('value'));
+        };
 
-      var format = (function() {
-        const f = d3.format(",.0f");
-        return d => `${f(d)} hours`;
-      })();
+        var sankey = (function() {
+          const sankey = d3.sankey()
+              .nodeWidth(15)
+              .nodePadding(10)
+              .extent([[1, 1], [width - 1, height - 5]]);
+          return ({nodes, links}) => sankey({
+            nodes: nodes.map(d => Object.assign({}, d)),
+            links: links.map(d => Object.assign({}, d))
+          });
+        })();
 
-      var build_chart = function(flow_yaml) {
-        svg = d3.select("#chart")
-          .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("id", 'main-sankey-vis')
-            .style("width", "100%")
-            .style("height", "auto");
+        var color = (function() {
+          const color = d3.scaleOrdinal(d3.schemeCategory10);
+          return name => color(name.replace(/ .*/, ""));
+        })();
+
+        var format = (function() {
+          const f = d3.format(",.0f");
+          return d => `${f(d)} hours`;
+        })();
+
+        var build_chart = function(flow_yaml) {
+          svg = d3.select("#chart")
+            .append("svg")
+              .attr("width", width)
+              .attr("height", height)
+              .attr("id", 'main-sankey-vis')
+              .style("width", "100%")
+              .style("height", "auto");
 
 
-        const {nodes, links} = sankey(flow_graph(yaml.safeLoad(flow_yaml)));
-      
-        svg.append("g")
-            .attr("stroke", "#000")
-          .selectAll("rect")
-          .data(nodes)
-          .enter().append("rect")
-            .attr("x", d => d.x0)
-            .attr("y", d => d.y0)
-            .attr("height", d => d.y1 - d.y0)
-            .attr("width", d => d.x1 - d.x0)
-            .attr("fill", d => color(d.name))
-          .append("title")
-            .text(d => `${d.name}\n${format(d.value)}`);
-      
-        const link = svg.append("g")
-            .attr("fill", "none")
-            .attr("stroke", "#000")
-            .attr("stroke-opacity", 0.2)
-          .selectAll("path")
-          .data(links)
-          .enter().append("path")
-            .attr("d", d3.sankeyLinkHorizontal())
-            .attr("stroke-width", function(d) { return d.width; });
+          const {nodes, links} = sankey(flow_graph(yaml.safeLoad(flow_yaml)));
+        
+          svg.append("g")
+              .attr("stroke", "#000")
+            .selectAll("rect")
+            .data(nodes)
+            .enter().append("rect")
+              .attr("x", d => d.x0)
+              .attr("y", d => d.y0)
+              .attr("height", d => d.y1 - d.y0)
+              .attr("width", d => d.x1 - d.x0)
+              .attr("fill", d => color(d.name))
+            .append("title")
+              .text(d => `${d.name}\n${format(d.value)}`);
+        
+          const link = svg.append("g")
+              .attr("fill", "none")
+              .attr("stroke", "#000")
+              .attr("stroke-opacity", 0.2)
+            .selectAll("path")
+            .data(links)
+            .enter().append("path")
+              .attr("d", d3.sankeyLinkHorizontal())
+              .attr("stroke-width", function(d) { return d.width; });
      
-        // var uidCounter = 0;
-        // const gradient = link.append("linearGradient")
-        //     .attr("id", function(d) {
-        //         uidCounter += 1; 
-        //         d.uid = "" + uidCounter;
-        //         return "" + uidCounter;
-        //     })
-        //     .attr("gradientUnits", "userSpaceOnUse")
-        //     .attr("x1", d => d.source.x1)
-        //     .attr("x2", d => d.target.x0);
-      
-        // gradient.append("stop")
-        //     .attr("offset", "0%")
-        //     .attr("stop-color", d => color(d.source.name));
-      
-        // gradient.append("stop")
-        //     .attr("offset", "100%")
-        //     .attr("stop-color", d => color(d.target.name));
-      
-        // link.append("path")
-        //     .attr("d", d3.sankeyLinkHorizontal())
-        //     .attr("stroke", d => d.uid)
-        //     .attr("stroke-width", d => Math.max(1, d.width));
-      
-        link.append("title")
-            .text(d => `${d.source.name} → ${d.target.name}\n${format(d.value)}`);
-      
-        svg.append("g")
-            .style("font", "10px sans-serif")
-          .selectAll("text")
-          .data(nodes)
-          .enter().append("text")
-            .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
-            .attr("y", d => (d.y1 + d.y0) / 2)
-            .attr("dy", "0.35em")
-            .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
-            .text(d => d.name);
-      
-        return svg.node();
-      };
+          // var uidCounter = 0;
+          // const gradient = link.append("linearGradient")
+          //     .attr("id", function(d) {
+          //         uidCounter += 1; 
+          //         d.uid = "" + uidCounter;
+          //         return "" + uidCounter;
+          //     })
+          //     .attr("gradientUnits", "userSpaceOnUse")
+          //     .attr("x1", d => d.source.x1)
+          //     .attr("x2", d => d.target.x0);
+        
+          // gradient.append("stop")
+          //     .attr("offset", "0%")
+          //     .attr("stop-color", d => color(d.source.name));
+        
+          // gradient.append("stop")
+          //     .attr("offset", "100%")
+          //     .attr("stop-color", d => color(d.target.name));
+        
+          // link.append("path")
+          //     .attr("d", d3.sankeyLinkHorizontal())
+          //     .attr("stroke", d => d.uid)
+          //     .attr("stroke-width", d => Math.max(1, d.width));
+        
+          link.append("title")
+              .text(d => `${d.source.name} → ${d.target.name}\n${format(d.value)}`);
+        
+          svg.append("g")
+              .style("font", "10px sans-serif")
+            .selectAll("text")
+            .data(nodes)
+            .enter().append("text")
+              .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
+              .attr("y", d => (d.y1 + d.y0) / 2)
+              .attr("dy", "0.35em")
+              .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
+              .text(d => d.name);
+        
+          return svg.node();
+        };
 
-      var chart = build_chart(get_flow_yaml());
+        var chart = build_chart(get_flow_yaml());
+      });
     })();
-    </script>
-
