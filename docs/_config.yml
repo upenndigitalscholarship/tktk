@@ -7,3 +7,8 @@ url: "https://upenndigitalscholarship.github.io" # the base hostname & protocol 
 # Build settings
 markdown: kramdown
 theme: jekyll-theme-minimal
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - "*/node_modules"
