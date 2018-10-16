@@ -26,54 +26,137 @@ layout: default
       var width = 500;
       var height = 300;
       const flow_yaml = `Magic Beans:
-  Django: 60
-  JavaScript: 40
+  Django: 100
 Mysterious Fern:
   Omeka: 80
   Python: 20
 Django:
-  Python: 40
-  JavaScript: 20
+  Python: 0.8
+  JavaScript: 0.2
 Omeka:
-  PHP: 60
-  JavaScript: 20
+  PHP: 0.8
+  JavaScript: 0.2
 Python:
-  Yve: 20
-  Uli: 40
+  Yve: 0.56
+  Uli: 0.44
 PHP:
-  Yve: 40
-  Uli: 20
+  Yve: 0.4
+  Uli: 0.6
 JavaScript:
-  Yve: 40
-  Uli: 40`;
+  Yve: 0.5
+  Uli: 0.5`;
 
       var flow_graph = function(flow_obj) {
         let flow_links = [];
         let flow_nodes = [];
         let flow_node_map = {};
-        let flow_edge_map = {};
-        let flow_node_inputs = {};
-        
-        let add_node = function(name) {
-          if (!flow_node_map.hasOwnProperty(name)) {
-            flow_node_map[name] = flow_nodes.length;
-            flow_nodes.push({name: name});
+        let input_links = {};
+        let output_links = {};
+     
+        // Here, `this` is a node object (from `flow_nodes`).
+        // If the total has already been calculated, use it. Otherwise,
+        // calculate it by summing the values for all incoming links.
+        let getTotal = function() {
+          if (this.total !== null) {
+            return this.total;
+          } else {
+            var total = 0;
+            for (var link in input_links[this.id]) {
+              total = total + input_links[this.id][link].getValue();
+            }
+            this.total = total;
+            return total;
           }
-        }
-        
-        for (var source in flow_obj) {
-          add_node(source);
-          for (var target in flow_obj[source]) {
-            add_node(target);
-            flow_links.push({
-              source: flow_node_map[source],
-              target: flow_node_map[target],
-              rawvalue: flow_obj[source][target],
-              value: flow_obj[source][target],
+        };
+
+        // Here, `this` is a link object (from `flow_links`).
+        // If the value has already been calculated, use it. Otherwise, 
+        // calculate it by multiplying this link's weight by the total
+        // of all inputs for its source node (as calculated by `getTotal`).
+        let getValue = function() {
+          if (this.value !== null) {
+            return this.value;
+          } else {
+            var value = this.weight * flow_nodes[this.source].getTotal();
+            this.value = value;
+            return value;
+          }
+        };
+
+        // Build the node and link lists
+        let add_node = function(name, getTotal) {
+          if (!flow_node_map.hasOwnProperty(name)) {
+            var node_id = flow_nodes.length;
+            flow_node_map[name] = node_id;
+            flow_nodes.push({
+              name: name,
+              id: node_id,
+              total: null,
+              getTotal: getTotal
             });
           }
+        };
+       
+        for (var source in flow_obj) {
+          add_node(source, getTotal);
+          for (var target in flow_obj[source]) {
+            add_node(target, getTotal);
+            var target_id = flow_node_map[target];
+            var source_id = flow_node_map[source];
+            var link = {
+              source: source_id,
+              target: target_id,
+              weight: flow_obj[source][target],
+              value: null,
+              getValue: getValue
+            };
+            flow_links.push(link);
+            
+            if (!input_links.hasOwnProperty(target_id)) {
+              input_links[target_id] = [];
+            }
+            input_links[target_id].push(link);
+            if (!output_links.hasOwnProperty(source_id)) {
+              output_links[source_id] = [];
+            }
+            output_links[source_id].push(link);
+          }
         }
-        
+
+
+        // These are the base cases for the implicit recursion defined above.
+        for (var link_key in flow_links) {
+          var link = flow_links[link_key];
+          if (!input_links.hasOwnProperty(link.source)) {
+            // The node has no inputs, so value == weight
+            link.value = link.weight;
+          }
+        }
+
+        for (var node in flow_nodes) {
+          if (!input_links.hasOwnProperty(node.id)) {
+            // The node has only outputs, so its total is the
+            // sum of the weights for its outgoing links.
+            if (node.total === null) {
+              var total = 0;
+              var node_out = output_links[node.id];
+              for (var out_link_key in node_out) {
+                var out_link = node_out[out_link_key];
+                total += out_link.weight;
+              }
+              node.total = total;
+            }
+          }
+        }
+
+        // The above definitions together constitute a recursive
+        // set of formulas that mean that by iterating over all nodes,
+        // and calling `getTotal`, we guarantee that all values are
+        // precomputed.
+        for (var node_key in flow_nodes) {
+          flow_nodes[node_key].getTotal();
+        }
+
         return {links: flow_links, nodes: flow_nodes};
       };
 
@@ -194,7 +277,6 @@ JavaScript:
         var reset_chart = function() {
           var flow_yaml = get_flow_yaml();
 
-          console.log(flow_yaml);
           try {
             yaml.safeLoad(flow_yaml);
           } catch (err) {
