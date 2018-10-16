@@ -5,52 +5,39 @@ layout: default
     <textarea id="flow-input" cols="80" rows="40"></textarea>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/3.12.0/js-yaml.min.js"></script>
     <script src="lib/d3-require.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
-    <script src="https://unpkg.com/d3-array"></script>
-    <script src="https://unpkg.com/d3-collection"></script>
-    <script src="https://unpkg.com/d3-path"></script>
-    <script src="https://unpkg.com/d3-shape"></script>
-    <script src="https://unpkg.com/d3-color"></script>
-    <script src="https://unpkg.com/d3-interpolate"></script>
-    <script src="https://unpkg.com/d3-scale"></script>
-    <script src="https://unpkg.com/d3-scale-chromatic"></script>
-    <script src="https://unpkg.com/d3-format"></script>
-    <script src="https://unpkg.com/d3-selection"></script>
-    <script src="https://unpkg.com/d3-sankey"></script> -->
     <script>
     (function() {
       var yaml = jsyaml;
       var width = 500;
       var height = 300;
-      const flow_yaml = `
-        Project 1:
-          Django: 60
-          JavaScript: 40
-        Project 2:
-          Omeka: 80
-          Python: 20
-        Django:
-          Python: 40
-          JavaScript: 20
-        Omeka:
-          PHP: 60
-          JavaScript: 20
-        Python:
-          Dev 1: 20
-          Dev 2: 40
-        PHP:
-          Dev 1: 40
-          Dev 2: 20
-        JavaScript:
-          Dev 1: 40
-          Dev 2: 40
-      `;
+      const flow_yaml = `Project 1:
+  Django: 60
+  JavaScript: 40
+Project 2:
+  Omeka: 80
+  Python: 20
+Django:
+  Python: 40
+  JavaScript: 20
+Omeka:
+  PHP: 60
+  JavaScript: 20
+Python:
+  Dev 1: 20
+  Dev 2: 40
+PHP:
+  Dev 1: 40
+  Dev 2: 20
+JavaScript:
+  Dev 1: 40
+  Dev 2: 40`;
 
       var flow_graph = function(flow_obj) {
         let flow_links = [];
         let flow_nodes = [];
         let flow_node_map = {};
         let flow_edge_map = {};
+        let flow_node_inputs = {};
         
         let add_node = function(name) {
           if (!flow_node_map.hasOwnProperty(name)) {
@@ -66,6 +53,7 @@ layout: default
             flow_links.push({
               source: flow_node_map[source],
               target: flow_node_map[target],
+              rawvalue: flow_obj[source][target],
               value: flow_obj[source][target],
             });
           }
@@ -122,7 +110,6 @@ layout: default
               .style("width", "100%")
               .style("height", "auto");
 
-          console.log(flow_yaml);
           const {nodes, links} = sankey(flow_graph(yaml.safeLoad(flow_yaml)));
         
           svg.append("g")
@@ -189,7 +176,22 @@ layout: default
           return svg.node();
         };
 
-        var chart = build_chart(get_flow_yaml());
+        var reset_chart = function() {
+          var flow_yaml = get_flow_yaml();
+
+          console.log(flow_yaml);
+          try {
+            yaml.safeLoad(flow_yaml);
+          } catch (err) {
+            return;
+          }
+          d3.select("#chart").selectAll("*").remove();
+          build_chart(flow_yaml);
+        }
+ 
+        reset_chart();
+
+        d3.select("#flow-input").on("input", reset_chart);
       });
     })();
     </script>
